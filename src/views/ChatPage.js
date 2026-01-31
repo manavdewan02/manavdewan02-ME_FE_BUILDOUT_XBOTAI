@@ -137,11 +137,19 @@ const handleSendMessage = (text) => {
 };
     
 const getBotResponse = (userMessage) => {
-    const question = userMessage.trim();
+    const normalizedUserMessage = userMessage
+        .toLowerCase()
+        .replace(/[^\w\s]/g, '')
+        .trim();
 
-    const matchingResponse = sampleData.find(
-        item => item.question === question
-    );
+    const matchingResponse = sampleData.find(item => {
+        const normalizedQuestion = item.question
+            .toLowerCase()
+            .replace(/[^\w\s]/g, '')
+            .trim();
+
+        return normalizedQuestion.includes(normalizedUserMessage);
+    });
 
     return matchingResponse
         ? matchingResponse.answer
