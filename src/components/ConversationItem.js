@@ -3,22 +3,23 @@ import React from 'react';
 import './ConversationItem.css';
 
 
+
 const ConversationItem = ({ conversation, onClick }) => {
     return (
-        <div
-            className="conversation-item"
-            onClick={() => onClick(conversation.id)}
-        >
-            <div className="conversation-date">
-                Conversation #{conversation.id}
-            </div>
-
+        <div className="conversation-item" onClick={() => onClick(conversation.id)}>
+            <div className="conversation-date">{new Date(conversation.timestamp).toLocaleDateString()}</div>
             <div className="conversation-summary">
-                {conversation.question.substring(0, 50)}...
+                {conversation.messages.length > 0 ? conversation.messages[0].text.substring(0, 50) + '...' : 'Empty Conversation'}
             </div>
+            {conversation.overallRating !== null && (
+                <div className="conversation-rating">
+                    Rating: {conversation.overallRating} ★
+                </div>
+            )}
         </div>
     );
 };
+
 
 
 
