@@ -97,16 +97,20 @@ const ChatPage = () => {
         });
     };
 
-    const getBotResponse = (userMessage) => {
-        const lowerCaseMessage = userMessage.toLowerCase().trim();
+    
+const getBotResponse = (userMessage) => {
+    const question = userMessage.trim();
 
-        // Removed TEMPORARY DEBUGGING CODE, as sampleData.json now directly supports the test query.
+    const matchingResponse = sampleData.find(
+        item => item.question === question
+    );
 
-        const matchingResponse = sampleData.find(item =>
-            lowerCaseMessage.includes(item.question.toLowerCase())
-        );
-        return matchingResponse ? matchingResponse.answer : "Sorry, Did not understand your query!";
-    };
+    return matchingResponse
+        ? matchingResponse.answer
+        : "Sorry, Did not understand your query!";
+};
+
+  
 
     const handleFeedback = (messageId, feedbackType) => {
         setMessages((prevMessages) => {
