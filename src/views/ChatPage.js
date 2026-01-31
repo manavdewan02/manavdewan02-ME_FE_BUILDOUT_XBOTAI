@@ -52,51 +52,89 @@ const ChatPage = () => {
         localStorage.setItem('conversations', JSON.stringify(updatedConversations));
     };
 
-    const handleSendMessage = (text) => {
-        const newUserMessage = {
-            id: `msg-${Date.now()}-user`,
-            text,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            type: 'user',
-        };
+    // const handleSendMessage = (text) => {
+    //     const newUserMessage = {
+    //         id: `msg-${Date.now()}-user`,
+    //         text,
+    //         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    //         type: 'user',
+    //     };
 
-        setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, newUserMessage];
-            const currentConversation = {
-                id: conversationId,
-                timestamp: updatedMessages[0].timestamp, // Use first message timestamp for conversation
-                messages: updatedMessages,
-                overallRating: overallRating,
-                subjectiveFeedback: subjectiveFeedback
-            };
-            updateConversationInLocalStorage(currentConversation);
-            return updatedMessages;
-        });
+    //     setMessages((prevMessages) => {
+    //         const updatedMessages = [...prevMessages, newUserMessage];
+    //         const currentConversation = {
+    //             id: conversationId,
+    //             timestamp: updatedMessages[0].timestamp, // Use first message timestamp for conversation
+    //             messages: updatedMessages,
+    //             overallRating: overallRating,
+    //             subjectiveFeedback: subjectiveFeedback
+    //         };
+    //         updateConversationInLocalStorage(currentConversation);
+    //         return updatedMessages;
+    //     });
 
-        // Simulate bot response - Removed setTimeout to fix Cypress timing issue
-        const botResponse = getBotResponse(text);
-        const newBotMessage = {
-            id: `msg-${Date.now()}-bot`,
-            text: botResponse,
-            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            type: 'bot',
-            feedback: null
-        };
+    //     // Simulate bot response - Removed setTimeout to fix Cypress timing issue
+    //     const botResponse = getBotResponse(text);
+    //     const newBotMessage = {
+    //         id: `msg-${Date.now()}-bot`,
+    //         text: botResponse,
+    //         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    //         type: 'bot',
+    //         feedback: null
+    //     };
 
-        setMessages((prevMessages) => {
-            const updatedMessages = [...prevMessages, newBotMessage];
-            const currentConversation = {
-                id: conversationId,
-                timestamp: updatedMessages[0].timestamp,
-                messages: updatedMessages,
-                overallRating: overallRating,
-                subjectiveFeedback: subjectiveFeedback
-            };
-            updateConversationInLocalStorage(currentConversation);
-            return updatedMessages;
-        });
+    //     setMessages((prevMessages) => {
+    //         const updatedMessages = [...prevMessages, newBotMessage];
+    //         const currentConversation = {
+    //             id: conversationId,
+    //             timestamp: updatedMessages[0].timestamp,
+    //             messages: updatedMessages,
+    //             overallRating: overallRating,
+    //             subjectiveFeedback: subjectiveFeedback
+    //         };
+    //         updateConversationInLocalStorage(currentConversation);
+    //         return updatedMessages;
+    //     });
+    // };
+const handleSendMessage = (text) => {
+    const userMessage = {
+        id: `msg-${Date.now()}-user`,
+        text,
+        timestamp: new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+        }),
+        type: 'user',
     };
 
+    const botText = getBotResponse(text);
+
+    const botMessage = {
+        id: `msg-${Date.now()}-bot`,
+        text: botText,
+        timestamp: new Date().toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+        }),
+        type: 'bot',
+        feedback: null,
+    };
+
+    setMessages((prevMessages) => {
+        const updatedMessages = [...prevMessages, userMessage, botMessage];
+
+        const currentConversation = {
+            id: conversationId,
+            timestamp: updatedMessages[0]?.timestamp || new Date().toISOString(),
+            messages: updatedMessages,
+            overallRating,
+            subjectiveFeedback,
+        };
+
+        updateConversationInLocalStorage(currentConversation);
+        return updatedMessages;
+    });
+};
     
 const getBotResponse = (userMessage) => {
     const question = userMessage.trim();
