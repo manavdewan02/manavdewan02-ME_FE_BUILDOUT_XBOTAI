@@ -151,9 +151,9 @@ const getBotResponse = (userMessage) => {
         return normalizedQuestion.includes(normalizedUserMessage);
     });
 
-    return matchingResponse
-        ? matchingResponse.answer
-        : "Sorry, Did not understand your query!";
+return matchingResponse
+    ? matchingResponse.response
+    : "Sorry, Did not understand your query!";
 };
 
   
